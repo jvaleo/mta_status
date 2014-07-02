@@ -1,5 +1,6 @@
 from lxml import etree
 from flask import Flask
+import json
 app = Flask(__name__)
 
 @app.route('/<line>')
@@ -13,8 +14,13 @@ def subway_status(line):
         subway_line = subway_element[0].text
 	if line == subway_line:
             subway_service_status = subway_element[1].text
-	    return subway_service_status
-
+	    data = { 'subway_line' : line,
+		      'status' : subway_service_status,
+		      'updated_at' : last_updated
+		   }
+            json_data = json.dumps(data)
+	    return json_data
+           
 def get_best_route(preferred_subway_lines):
     """
     Take in a list of lines, and only return those that are in good service
