@@ -1,6 +1,10 @@
 from lxml import etree
+from flask import Flask
+app = Flask(__name__)
 
+@app.route('/<line>')
 def subway_status(line):
+    line = line.upper()
     xml_base =  etree.parse("http://web.mta.info/status/serviceStatus.txt")
     root = xml_base.getroot()
     #move the above to an in memory db, fetch every 5 minutes and update
@@ -25,3 +29,5 @@ def get_best_route(preferred_subway_lines):
 	    print 'Status for {} is {}'.format(line, subway_service_status)
 	else:
 	    print 'Status for {} is {}'.format(line, subway_service_status)
+if __name__ == '__main__':
+    app.run()
