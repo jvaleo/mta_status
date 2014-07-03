@@ -3,9 +3,19 @@ from flask import Flask
 import json
 app = Flask(__name__)
 
+LINES_DICT = {'123': ['1', '2', '3'],
+	      '456': ['4', '5', '6'],
+   	      'ACE': ['A', 'C', 'E'],
+              'BDFM': ['B', 'D', 'F', 'M'],
+              'JZ': ['J', 'Z'],
+              'NQR': ['N', 'Q', 'R'] }
+
 @app.route('/<line>')
 def subway_status(line):
     line = line.upper()
+    for key, value in LINES_DICT.iteritems():
+        if line in value:
+            line = key
     xml_base =  etree.parse("http://web.mta.info/status/serviceStatus.txt")
     root = xml_base.getroot()
     #move the above to an in memory db, fetch every 5 minutes and update
